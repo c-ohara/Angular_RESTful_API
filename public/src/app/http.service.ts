@@ -16,4 +16,7 @@ export class HttpService {
   getOne(id: string) {
     return this._http.get('/Tasks/' + id);
   }
+  postToServer(num) {
+    return this._http.post('/Tasks', num);
+  }
 }

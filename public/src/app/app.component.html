@@ -1,20 +1,19 @@
-<h1>Task List:</h1>
-<div *ngIf="tasks.length>0">
+<div class = "align-content-center">
+  <h1 class = "text-center d-block">Restful Tasks API</h1>
+  <button (click)="getTasksFromHttp()" class = "col-2 offset-5 btn btn-primary">GET ALL TASKS</button>
+</div>
+<h3>Find event by Title: </h3>
+<input (keyup)="getByEvent($event)" type = "text">
+<div *ngIf="tasks.length>0" class = "col-8 offset-2">
   <ul>
-    <li *ngFor="let task of tasks">
-      <ul>
-        <li>Task Name: {{ task['title'] }}</li>
-        <li>Description: {{ task['description'] }}</li>
-        <li>Completed: {{ task['completed'] }}</li>
-      </ul>
-    </li>
+    <div *ngFor="let task of tasks" class = "mt-2">
+      <p class = "d-inline-block col-8 text-center">{{task['title']}}</p> 
+      <button (click)="getTask(task['_id'])" class = "circle text-white py-3">SHOW</button>
+      <hr>
+    </div>
   </ul>
 </div>
-<div *ngIf="task">
-  <h1>Task Number 2:</h1>
-  <ul>
-    <li>Task Name: {{ task['currentTask'].title }}</li>
-    <li>Description: {{ task['currentTask'].description }}</li>
-    <li>Completed: {{ task['currentTask'].completed }}</li>
-  </ul>
+<div *ngIf="task" class = "text-center">
+    <h3>{{ task['currentTask'].title }}</h3>
+    <h3>{{ task['currentTask'].description }}</h3>
 </div>
