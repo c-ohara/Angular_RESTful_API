@@ -1,44 +1,16 @@
-<div *ngIf="valmessages.length>0">
-    <p *ngFor="let message of valmessages">{{ message }}</p>
+<div class = "align-content-center">
+  <h1 class = "text-center d-block">Restful Tasks API</h1>
+  <button (click)="getTasksFromHttp()" class = "col-2 offset-5 btn btn-primary">GET ALL TASKS</button>
 </div>
-<div class = "col-6">
-  <h1>Submit a new task!</h1>
-  <form (submit)="Create()">
-    <div class = "form-inline mb-3">
-      <p class = "mr-4 col-3">Title:</p>
-      <input type="text" name="title" [(ngModel)]="newTask.title" class = "form-control">
+<h3>Find event by Title: </h3>
+<input (keyup)="getByEvent($event)" type = "text">
+<div *ngIf="tasks.length>0" class = "col-6 offset-3 mb-3 alltasks">
+  <ul>
+    <div *ngFor="let task of tasks" class = "mt-2">
+      <p class = "d-inline-block col-8 text-center">{{task['title']}}</p> 
+      <button (click)="getTask(task['_id'])" class = "circle text-white py-3">SHOW</button>
+      <hr>
     </div>
-    <div class = "form-inline mb-3">
-      <p class = "mr-4 col-3">Description:</p>
-      <input type="text" name="description" [(ngModel)]="newTask.description" class = "form-control">
-    </div>
-    <input type="submit" value="Create" class = "change d-block mb-4 offset-4">
-  </form>
+  </ul>
 </div>
-<h1>Task List</h1>
-<div *ngIf="tasks.length>0" class = "col-6 d-inline-block align-top">
-  <div *ngFor="let task of tasks" class = "mt-2 border border-dark">
-    <div class = "col-6 d-inline-block p-2">
-      <h1 class = "mb-4">{{task['title']}}</h1>
-      <p>{{ task['description'] }}</p>
-    </div>
-    <div class = "col-5 d-inline-block">
-      <button (click)="editTask(task['_id'])" class = "change d-block mb-4">EDIT</button>
-      <button (click)="Delete(task['_id'])" class = "delete d-block">DELETE</button>
-    </div>  
-  </div>
-</div>
-<div *ngIf="eTask" class = "text-center col-5 d-inline-block align-top">
-  <h1>Edit a task</h1>
-  <form (submit)="Update()" class = "offset-2">
-    <div class = "form-inline mb-3">
-      <p class = "mr-4 col-4">Title:</p>
-      <input type="text" name="title" [(ngModel)]="eTask.title" class = "form-control">
-    </div>
-    <div class = "form-inline mb-3">
-      <p class = "mr-4 col-4">Description:</p>
-      <input type="text" name="description" [(ngModel)]="eTask.description" class = "form-control">
-    </div>
-    <input type="submit" value="Update" class = "change d-block mb-4 offset-4">
-  </form>
-</div>
+<app-interactive *ngIf="task" [taskToShow]="task"></app-interactive>
