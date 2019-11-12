@@ -12,11 +12,12 @@ export class AppComponent implements OnInit {
   task: any;
   newTask: any;
   eTask: any;
-  // valmessages: string[] = [];
+  valmessages: string[];
   constructor(private _httpService: HttpService){};
 
   ngOnInit() {
     this.newTask = { title: "", description: "" }
+    this.valmessages = [];
     this.getTasksFromHttp();
   }
 
@@ -37,7 +38,6 @@ export class AppComponent implements OnInit {
   editTask(id: string) {
     this._httpService.getOne(id).subscribe(data => {
       this.eTask = data['currentTask'];
-      // this.eButton = true;
     })
   }
   Delete(id: string) {
@@ -51,12 +51,13 @@ export class AppComponent implements OnInit {
     this._httpService.addTask(this.newTask).subscribe(
       data => {
         console.log(data);
-        // if (data['status'] == false) {
-        //   this.valmessages = data['messages'];
-        // }
-      // },
-      // error => {
-      //   console.log(error);
+        if (data['status'] == false) {
+          this.valmessages = data['errors'];
+        }
+        else {
+          this.valmessages = [];
+        }
+        console.log(this.valmessages);
       });
     this.getTasksFromHttp();
     this.newTask = { title: "", description: "" }

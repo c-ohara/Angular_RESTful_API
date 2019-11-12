@@ -34,18 +34,16 @@ module.exports = {
                 res.json({status: true, addedTask});
             })
         .catch(err => {
-            console.log(err);
+            // console.log(err);
             let messages = [];
-            if ("description" in err['errors'].errors) {
-                messages.push(err['errors'].errors.description.message);
-            }
-            if ("title" in err['errors'].errors) {
-                messages.push(err['errors'].errors.title.message);
+            for (var key in err.errors) {
+                messages.push(err.errors[key].message);
             }
             res.json({status: false, errors: messages});
         })
     },
     update: (req,res) =>{
+        Task.validate();
         Task.updateOne({_id: req.params.id}, {
             title: req.body.title,
             description: req.body.description,
