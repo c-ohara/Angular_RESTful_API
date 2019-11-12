@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
     let observable = this._httpService.getTasks();
     observable.subscribe(data => {
       this.tasks = data['Tasks'];
-      console.log(this.tasks);
     });
   }
   getTask(id: string) {
@@ -47,26 +46,30 @@ export class AppComponent implements OnInit {
   }
 
   Create() {
-    console.log(this.newTask);
     this._httpService.addTask(this.newTask).subscribe(
       data => {
-        console.log(data);
         if (data['status'] == false) {
           this.valmessages = data['errors'];
         }
         else {
           this.valmessages = [];
         }
-        console.log(this.valmessages);
       });
     this.getTasksFromHttp();
     this.newTask = { title: "", description: "" }
   }
 
   Update() {
-    this._httpService.updateTask(this.eTask);
+    this._httpService.updateTask(this.eTask).subscribe(data => {
+      console.log(data);
+      if (data['status'] == false) {
+        this.valmessages = data['errors'];
+      }
+      else {
+        this.eTask = undefined;
+        this.valmessages = [];
+      }
+    });
     this.getTasksFromHttp();
-    this.eTask = undefined;
   }
-
 }

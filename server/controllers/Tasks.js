@@ -6,7 +6,6 @@ module.exports = {
         Task.findByIdAndUpdate(req.params.id)
         Task.find().then(
             allTasks => {
-                console.log(allTasks)
                 res.json({status: true, Tasks: allTasks})
             }
         ).catch(
@@ -18,11 +17,25 @@ module.exports = {
     show: (req, res) => {
         Task.findById({_id: req.params.id})
         .then( currentTask =>{
-            console.log(currentTask);
             res.json({status: true, currentTask});
         })
         .catch( err => {
             res.json({status: false, errors: err})
+        })
+    },
+    update: (req,res) =>{
+        Task.updateOne({_id: req.params.id}, {
+            title: req.body.title,
+            description: req.body.description,
+            completed: req.body.completed
+        }, { runValidators: true })
+        .then(oneTask => res.json(oneTask))
+        .catch(err => {
+            let messages = [];
+            for (var key in err.errors) {
+                messages.push(err.errors[key].message);
+            }
+            res.json({status: false, errors: messages})
         })
     },
     create: (req, res)=>{
@@ -34,23 +47,13 @@ module.exports = {
                 res.json({status: true, addedTask});
             })
         .catch(err => {
-            // console.log(err);
+            console.log(err);
             let messages = [];
             for (var key in err.errors) {
                 messages.push(err.errors[key].message);
             }
             res.json({status: false, errors: messages});
         })
-    },
-    update: (req,res) =>{
-        Task.validate();
-        Task.updateOne({_id: req.params.id}, {
-            title: req.body.title,
-            description: req.body.description,
-            completed: req.body.completed
-        })
-        .then(oneTask => res.json(oneTask))
-        .catch(err => res.json({err:err}))
     },
     remove: (req, res)=>{
         Task.deleteOne({_id : req.params.id})
