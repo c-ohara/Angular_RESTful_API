@@ -6,11 +6,20 @@ import { HttpService } from './http.service'
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'public';
   tasks = [];
-  task: Object;
+  task: any;
+  newTask: any;
+  eTask: any;
+  // valmessages: string[] = [];
   constructor(private _httpService: HttpService){};
+
+  ngOnInit() {
+    this.newTask = { title: "", description: "" }
+    this.getTasksFromHttp();
+  }
+
   getTasksFromHttp() {
     let observable = this._httpService.getTasks();
     observable.subscribe(data => {
@@ -25,18 +34,38 @@ export class AppComponent {
       console.log(this.task);
     })
   }
-  getByEvent(event) {
-    if (event.srcElement.value != ""){
-      let title = event.srcElement.value;
-      this._httpService.getTasks().subscribe(data => {
-        for (let check of data['Tasks']) {
-          if (title == check['title']) {
-            this._httpService.getOne(check['_id']).subscribe(data =>{
-              this.task = data;
-            })
-          }
-        }
-      })
-    }
+  editTask(id: string) {
+    this._httpService.getOne(id).subscribe(data => {
+      this.eTask = data['currentTask'];
+      // this.eButton = true;
+    })
   }
+  Delete(id: string) {
+    console.log(id);
+    this._httpService.deleteTask(id);
+    this.getTasksFromHttp();
+  }
+
+  Create() {
+    console.log(this.newTask);
+    this._httpService.addTask(this.newTask).subscribe(
+      data => {
+        console.log(data);
+        // if (data['status'] == false) {
+        //   this.valmessages = data['messages'];
+        // }
+      // },
+      // error => {
+      //   console.log(error);
+      });
+    this.getTasksFromHttp();
+    this.newTask = { title: "", description: "" }
+  }
+
+  Update() {
+    this._httpService.updateTask(this.eTask);
+    this.getTasksFromHttp();
+    this.eTask = undefined;
+  }
+
 }

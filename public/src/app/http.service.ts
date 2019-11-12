@@ -12,11 +12,17 @@ export class HttpService {
   getTasks() {
     return this._http.get('/Tasks');
   }
-
   getOne(id: string) {
     return this._http.get('/Tasks/' + id);
   }
-  postToServer(num) {
-    return this._http.post('/Tasks', num);
+  addTask(newTask) {
+    return this._http.post("/Tasks", newTask);
+  }
+  updateTask(editTask) {
+    return this._http.put("/Tasks/" + editTask['_id'], editTask);
+  }
+  deleteTask(id: string) {
+    console.log("Hello?");
+    this._http.delete("/Tasks/" + id).subscribe(data => console.log(data));
   }
 }

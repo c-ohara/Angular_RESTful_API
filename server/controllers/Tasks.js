@@ -35,7 +35,14 @@ module.exports = {
             })
         .catch(err => {
             console.log(err);
-            res.json({status: false, errors: err});
+            let messages = [];
+            if ("description" in err['errors'].errors) {
+                messages.push(err['errors'].errors.description.message);
+            }
+            if ("title" in err['errors'].errors) {
+                messages.push(err['errors'].errors.title.message);
+            }
+            res.json({status: false, errors: messages});
         })
     },
     update: (req,res) =>{
